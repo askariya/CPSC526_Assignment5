@@ -83,7 +83,16 @@ def create_packet(line):
 
 # checks the packet against the rules
 def validate_packet(packet):
-    pass # TODO figure out how to start this
+    for rule in rules:
+        # check direction
+        if packet["direction"] != rule["direction"]:
+            continue
+        # check IP
+        # check port
+        # check flag
+
+def check_IP():
+    pass # TODO Compare the IPs here
 
 # reads in the packets from std input
 def read_input_packets():
@@ -92,10 +101,10 @@ def read_input_packets():
         packet, valid = create_packet(line)
         # if the packet is invalid, skip
         if not valid:
-            print("Packet Error")
+            # print("Packet Error")
             continue
         validate_packet(packet)
-        print(packet)
+        # print(packet)
 
 # argparse function to handle user input
 # Reference: https://docs.python.org/3.6/howto/argparse.html
