@@ -1,9 +1,11 @@
 import argparse
-import string
 import sys
 import funcs
 
 rules = [] # global list to hold a set of rules (dictionaries)
+
+def print_error(message):
+    print(message, file=sys.stderr)
 
 # read in the firewall rules from the config file
 def read_config(filename):
@@ -17,6 +19,8 @@ def read_config(filename):
             if correct:
                 # create and add the rule to the rules list
                 rules.append(rule)
+            else:
+                print_error("Rule Error")
 
 # reads in the packets from std input
 def read_input_packets():
@@ -25,6 +29,7 @@ def read_input_packets():
         packet, correct = funcs.create_packet(line)
         # if the packet is invalid, skip
         if not correct:
+            print_error("Packet Error")
             continue
         # print output
         print(funcs.validate_packet(rules, packet))
