@@ -15,6 +15,9 @@ def read_config(filename):
         for line in f:
             line_num += 1
             line = line.strip()
+            # if the line is empty or is a comment, ignore
+            if line.startswith("#") or line == "":
+                continue
             line = line.split()
             # check if the line contains a valid rule
             rule, correct = funcs.create_rule(line)
