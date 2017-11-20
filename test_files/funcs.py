@@ -147,7 +147,7 @@ def validate_packet(rules, packet):
             if packet["port"] not in rule["ports"]:
                 continue
         # return the output if a match is found
-        result = rule["action"] + "(" + rule["line_num"] + ") " + packet["direction"] \
+        result = rule["action"] + "(" + str(rule["line_num"]) + ") " + packet["direction"] \
         + " " + packet["ip"] + " " + packet["port"] + " " + packet["flag"]
         return result
 
