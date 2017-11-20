@@ -7,4 +7,5 @@ in accept * * established
 out accept 137.159.0.0/8 *
 out reject 10.0.0.0/8 *
 out reject * 22
+out meow * 21
 out accept * *

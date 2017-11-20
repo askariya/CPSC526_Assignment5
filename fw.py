@@ -10,8 +10,10 @@ def print_error(message):
 # read in the firewall rules from the config file
 def read_config(filename):
     global rules
+    line_num = 0
     with open(filename) as f:
         for line in f:
+            line_num += 1
             line = line.strip()
             line = line.split()
             # check if the line contains a valid rule
@@ -20,16 +22,20 @@ def read_config(filename):
                 # create and add the rule to the rules list
                 rules.append(rule)
             else:
-                print_error("Rule Error")
+                print_error("Rule Error on Line: " + str(line_num) + \
+                "\nContinuing...")
 
 # reads in the packets from std input
 def read_input_packets():
+    line_num = 0
     for line in sys.stdin:
+        line_num += 1
         line = line.strip() # strip extra whitespace
         packet, correct = funcs.create_packet(line)
         # if the packet is invalid, skip
         if not correct:
-            print_error("Packet Error")
+            print_error("Packet Error on Line: " + str(line_num) + \
+            "\nContinuing...")
             continue
         # print output
         print(funcs.validate_packet(rules, packet))
