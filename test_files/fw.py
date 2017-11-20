@@ -25,8 +25,8 @@ def read_config(filename):
                 # create and add the rule to the rules list
                 rules.append(rule)
             else:
-                print_error("Rule Error on Line: " + str(line_num) + \
-                "\nContinuing...")
+                print_error("Warning: Invalid Rule on Line: " + str(line_num) \
+                + "\nContinuing...")
 
 # reads in the packets from std input
 def read_input_packets():
@@ -37,8 +37,8 @@ def read_input_packets():
         packet, correct = funcs.create_packet(line)
         # if the packet is invalid, skip
         if not correct:
-            print_error("Packet Error on Line: " + str(line_num) + \
-            "\nContinuing...")
+            print_error("Warning: Invalid Packet on Line: " + str(line_num) \
+                + "\nContinuing...")
             continue
         # print output
         print(funcs.validate_packet(rules, packet))

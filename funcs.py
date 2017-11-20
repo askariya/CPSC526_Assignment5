@@ -30,7 +30,7 @@ def check_rule(rule):
             return False
 
     # check subnet
-    if rule["subnet"] != None: # if the subnet exists
+    if rule["subnet"] is not None: # if the subnet exists
         try:
             if int(rule["subnet"]) not in range(0, 33):
                 return False
@@ -53,9 +53,9 @@ def check_rule(rule):
     return True
 
 # returns a ditionary containing the rule from the argument
-def create_rule(line):
-    # TODO need to check if line is empty or starts with #
+def create_rule(line, line_num):
     rule = {}
+    rule["line_num"] = line_num
     if (len(line) == 4):
         rule["direction"] = line[0]
         rule["action"] = line[1]
@@ -85,7 +85,7 @@ def create_rule(line):
     # format flag
     if rule["flag"] == "established":
         rule["flag"] = '1'
-    elif rule["flag"] == None:
+    elif rule["flag"] is None:
         rule["flag"] = '0'
 
     return rule, check_rule(rule)
@@ -128,9 +128,9 @@ def create_packet(line):
 # checks the packet against the rules
 # "continue" means no match with a rule
 def validate_packet(rules, packet):
-    rule_num = 0 # rule number counter
+    # rule_num = 0 # rule number counter
     for rule in rules:
-        rule_num += 1
+        # rule_num += 1
         # check flag
         # if rule only applies to established packets
         if packet["flag"] == '0' and rule["flag"] == '1':
@@ -146,7 +146,7 @@ def validate_packet(rules, packet):
             if packet["port"] not in rule["ports"]:
                 continue
         # return the output if a match is found
-        result = rule["action"] + "(" + str(rule_num) + ") " + packet["direction"] \
+        result = rule["action"] + "(" + str(rule["line_num"]) + ") " + packet["direction"] \
         + " " + packet["ip"] + " " + packet["port"] + " " + packet["flag"]
         return result
 
@@ -155,10 +155,14 @@ def validate_packet(rules, packet):
     " " + packet["ip"] + " " + packet["port"] + " " + packet["flag"]
     return result
 
+# adapted from: https://codereview.stackexchange.com/questions/19388/\decimal-to-binary-converter-for-ip-addresses
+def ip_to_binary(ip):
+    return ''.join(['{0:08b}'.format(int(num)) for num in ip.split(".")])
+
 # function to check whether packet_ip fits in rule_ip's subnet
 def compare_ips(packet_ip, rule_ip, subnet):
     # if there is no subnet
-    if subnet == None:
+    if subnet is None:
         if packet_ip == rule_ip or rule_ip == "*":
             return True
         else:
@@ -175,7 +179,3 @@ def compare_ips(packet_ip, rule_ip, subnet):
         return True
     else:
         return False
-
-# adapted from: https://codereview.stackexchange.com/questions/19388/decimal-to-binary-converter-for-ip-addresses
-def ip_to_binary(ip):
-    return ''.join(['{0:08b}'.format(int(num)) for num in ip.split(".")])
