@@ -1,8 +1,5 @@
-import argparse
 import string
 import sys
-import socket
-import struct
 
 
 def check_ip(ip):
