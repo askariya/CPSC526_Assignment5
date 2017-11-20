@@ -53,9 +53,10 @@ def check_rule(rule):
     return True
 
 # returns a ditionary containing the rule from the argument
-def create_rule(line):
+def create_rule(line, line_num):
     # TODO need to check if line is empty or starts with #
     rule = {}
+    rule["line_num"] = line_num
     if (len(line) == 4):
         rule["direction"] = line[0]
         rule["action"] = line[1]
@@ -128,9 +129,9 @@ def create_packet(line):
 # checks the packet against the rules
 # "continue" means no match with a rule
 def validate_packet(rules, packet):
-    rule_num = 0 # rule number counter
+    # rule_num = 0 # rule number counter
     for rule in rules:
-        rule_num += 1
+        # rule_num += 1
         # check flag
         # if rule only applies to established packets
         if packet["flag"] == '0' and rule["flag"] == '1':
@@ -146,7 +147,7 @@ def validate_packet(rules, packet):
             if packet["port"] not in rule["ports"]:
                 continue
         # return the output if a match is found
-        result = rule["action"] + "(" + str(rule_num) + ") " + packet["direction"] \
+        result = rule["action"] + "(" + rule["line_num"] + ") " + packet["direction"] \
         + " " + packet["ip"] + " " + packet["port"] + " " + packet["flag"]
         return result
 

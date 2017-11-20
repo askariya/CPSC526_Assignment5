@@ -20,7 +20,7 @@ def read_config(filename):
                 continue
             line = line.split()
             # check if the line contains a valid rule
-            rule, correct = funcs.create_rule(line)
+            rule, correct = funcs.create_rule(line, line_num)
             if correct:
                 # create and add the rule to the rules list
                 rules.append(rule)
