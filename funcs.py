@@ -19,16 +19,13 @@ def check_rule(rule):
     # check direction
     if rule["direction"] not in ("in", "out"):
         return False
-
     # check action
     if rule["action"] not in ("accept", "reject"):
         return False
-
     # check IP
     if rule["ip"] != "*": # if the ip is not an ALL classifier
         if not check_ip(rule["ip"]):
             return False
-
     # check subnet
     if rule["subnet"] is not None: # if the subnet exists
         try:
@@ -36,7 +33,6 @@ def check_rule(rule):
                 return False
         except:
             return False
-
     # check ports
     if rule["ports"][0] != "*": # if the port is not an ALL classifier
         for port in rule["ports"]:
@@ -45,7 +41,6 @@ def check_rule(rule):
                     return False
             except:
                 return False
-
     # check flag
     if rule["flag"] != '0' and rule["flag"] != '1':
         return False
@@ -96,7 +91,6 @@ def create_packet(line):
     line = line.split()
     if len(line) != 4:
         return None, False
-
     packet["direction"] = line[0]
     packet["ip"] = line[1]
     packet["port"] = line[2]
@@ -106,18 +100,15 @@ def create_packet(line):
     # direction
     if packet["direction"] not in ("in", "out"):
         return None, False
-
     # IP
     if not check_ip(packet["ip"]):
         return None, False
-
     # port
     try:
         if int(packet["port"]) not in range(0, 65536):
             return None, False
     except:
         return None, False
-
     # flag
     if packet["flag"] not in ("0", "1"):
         return None, False
@@ -130,7 +121,6 @@ def create_packet(line):
 def validate_packet(rules, packet):
     # rule_num = 0 # rule number counter
     for rule in rules:
-        # rule_num += 1
         # check flag
         # if rule only applies to established packets
         if packet["flag"] == '0' and rule["flag"] == '1':
@@ -150,12 +140,13 @@ def validate_packet(rules, packet):
         + " " + packet["ip"] + " " + packet["port"] + " " + packet["flag"]
         return result
 
-    # drop if none found
+    # drop if no match found
     result = "drop() " + packet["direction"] + \
     " " + packet["ip"] + " " + packet["port"] + " " + packet["flag"]
     return result
 
-# adapted from: https://codereview.stackexchange.com/questions/19388/\decimal-to-binary-converter-for-ip-addresses
+# adapted from:
+# https://codereview.stackexchange.com/questions/19388/\decimal-to-binary-converter-for-ip-addresses
 def ip_to_binary(ip):
     return ''.join(['{0:08b}'.format(int(num)) for num in ip.split(".")])
 
@@ -167,13 +158,10 @@ def compare_ips(packet_ip, rule_ip, subnet):
             return True
         else:
             return False
-
     packet_ip = ip_to_binary(packet_ip)
     rule_ip = ip_to_binary(rule_ip)
-
     # get first subnet # of bits
     matching_bits = rule_ip[0:int(subnet)]
-
     # check if the subnet bits are in the packet IP
     if packet_ip.startswith(matching_bits):
         return True

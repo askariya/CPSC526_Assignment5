@@ -1,5 +1,6 @@
 import argparse
 import sys
+import os.path
 import funcs
 
 rules = [] # global list to hold a set of rules (dictionaries)
@@ -7,9 +8,17 @@ rules = [] # global list to hold a set of rules (dictionaries)
 def print_error(message):
     print(message, file=sys.stderr)
 
+def check_file_exists(filename):
+    if not os.path.isfile(filename):
+        print_error("Error: File " + filename + " not found")
+        sys.exit()
+
+
 # read in the firewall rules from the config file
 def read_config(filename):
     global rules
+    # exit program if file doesn't exist
+    check_file_exists(filename)
     line_num = 0
     with open(filename) as f:
         for line in f:
