@@ -24,8 +24,6 @@ def read_config(filename):
         for line in f:
             line_num += 1
             line = line.strip()
-            # replace any tab characters with spaces
-            line = line.replace('\\t', ' ')
             # if the line is empty or is a comment, ignore
             if line.startswith("#") or line == "":
                 continue

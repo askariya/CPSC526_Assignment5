@@ -1,6 +1,7 @@
 import string
 import sys
 
+
 def check_ip(ip):
     ip = ip.split(".")
     if len(ip) != 4:
